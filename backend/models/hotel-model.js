@@ -1,66 +1,84 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const hotelSchema = new Schema({
-        name:{
-            type: String,
-            required: true
+const hotelSchema = new Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+    },
+    approve: {
+      type: Boolean,
+      default: false,
+      required: true,
+    },
+    email: {
+      type: String,
+      required: true,
+    },
+    description: {
+      type: String,
+    },
+    location: {
+      city: {
+        type: String,
+        required: true,
+      },
+      state: {
+        type: String,
+        required: true,
+      },
+      country: {
+        type: String,
+        required: true,
+      },
+    },
+    address: {
+      type: String,
+      required: true,
+    },
+    contact_number: {
+      type: String,
+      required: true,
+    },
+    rooms: {
+      type: Array,
+      items: {
+        room_type: {
+          type: String,
         },
-        approve:{
-            type: Boolean,
-            default: false,
-            required: true
+        price_per_nigh: {
+          type: Number,
         },
-        email:{
-            type: String,
-            required: true,
+        total_room_available: {
+          type: Number,
         },
-        description:{
-            type: String
+        room_image: {
+          type: String,
         },
-        location:{
-            city: {
-                type: String,
-                required: true
-            },
-            state: {
-                type: String,
-                required: true
-            },
-            country: {
-                type: String,
-                required: true
-            }
+      },
+    },
+    images: {
+      type: Array,
+      items: {
+        type: String,
+      },
+    },
+    feedbacks: [
+      {
+        userId: {
+          type: Schema.Types.ObjectId,
+          ref: "User",
         },
-        address: {
-            type: String,
-            required: true
+        message: {
+          type: String,
         },
-        "contact_number":{
-            type: String,
-            required: true
-        },
-        rooms:[
-            {
-                "room_type":{
-                    type: String
-                },
-                "price_per_nigh":{
-                    type: Number
-                },
-                "total_room_available":{
-                    type: Number
-                }
-            }
-        ],
-        images:{
-            type: Array,
-            items:{
-                type: String,
-            }
-        }
-},{
-    timestamps: true
-});
+      },
+    ],
+  },
+  {
+    timestamps: true,
+  }
+);
 
-module.exports = mongoose.model('Hotel', hotelSchema, 'hotels');
+module.exports = mongoose.model("Hotel", hotelSchema, "hotels");

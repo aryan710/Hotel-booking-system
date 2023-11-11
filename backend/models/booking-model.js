@@ -25,10 +25,6 @@ const bookingSchema = new Schema(
       type: Date,
       required: true,
     },
-    numberOfGuests: {
-      type: Number,
-      required: true,
-    },
     totalPrice: {
       type: Number,
       required: true,

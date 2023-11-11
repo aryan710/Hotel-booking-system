@@ -1,10 +1,15 @@
 const hotelControllers = require("./controllers/hotelControllers");
 const authControllers = require("./controllers/authControllers");
+const bookingController = require("./controllers/bookingController");
+const authMiddleware = require("./middleware/auth-middleware");
+const customerMiddleware = require("./middleware/customer-middleware");
 const router = require('express').Router();
 
 // hotel routes
 router.get('/api/get-hotels', hotelControllers.getHotels)
 router.get('/api/get-hotel/:id', hotelControllers.getHotel)
+router.post('/api/book-hotel/:id', authMiddleware,bookingController.bookHotel)
+router.post('/api/create-hotel', hotelControllers.createHotel)
 
 // user routes
 router.post('/api/user-register', authControllers.register);

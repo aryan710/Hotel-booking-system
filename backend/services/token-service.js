@@ -12,7 +12,12 @@ class TokenService{
         });
         return {accessToken,refreshToken}
     }
-
+    verifyAccessToken(accessToken){
+        return jwt.verify(accessToken, accessTokenSecret);
+    }
+    verifyRefreshToken(refreshToken){
+        return jwt.verify(refreshToken, refreshTokenSecret);
+    }
     async storeRefreshToken(refreshToken, userId){
         return await refreshModel.create({token: refreshToken, userId});
     }

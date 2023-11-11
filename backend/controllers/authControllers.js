@@ -70,6 +70,8 @@ class AuthControlers {
     // generate tokens
     const { accessToken, refreshToken } = tokenService.createToken({
       _id: user._id,
+      role: user.role,
+      username: user.username
     });
 
     try {
@@ -149,6 +151,8 @@ class AuthControlers {
     // generate tokens
     const { accessToken, refreshToken } = tokenService.createToken({
       _id: user._id,
+      role: user.role,
+      username: user.username
     });
 
     try {

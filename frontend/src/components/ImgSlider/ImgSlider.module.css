@@ -1,0 +1,27 @@
+.left .bigImg{
+    padding: 20px;
+    overflow: hidden;
+ }
+ .left .bigImg img{
+    /* object-fit: cover; */
+    border: 5px solid rgb(69, 150, 255);
+ }
+ .left .smallImgs{
+     display: flex;
+     align-items: center;
+     gap: 20px;
+     padding: 0 20px;
+ }
+ .left .smallImg{
+     cursor: pointer;
+ }
+ 
+ .left .smallImgInactive{
+     border: 5px solid transparent;
+     transition: all .3s ease-in-out;
+ }
+ .left .smallImgActive{
+     border: 5px solid rgb(69, 150, 255);
+     transition: all .3s ease-in-out;
+ }
+ 

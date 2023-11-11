@@ -1,0 +1,16 @@
+.hotelsWrapper{
+    width: 90%;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 20px 0;
+}
+.hotelsUpperContainer{
+    height: 100%;
+}
+.hotelsContainer{
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+}

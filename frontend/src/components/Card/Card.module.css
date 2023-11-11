@@ -1,0 +1,52 @@
+.cardWrapper{
+    width: 900px;
+    height: 250px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    background: rgb(226, 239, 250);
+    cursor: pointer;
+    transition: all .3s ease-in-out;
+}
+.cardWrapper:hover{
+    background: rgb(201, 208, 213);
+}
+.cardContaint{
+    display: flex;
+    align-items: center;
+}
+.left{
+    padding: 10px;
+}
+.right{
+    padding: 20px;
+}
+.hotelImage{
+    height: 200px;
+}
+.ratings{
+    display: block;
+    background-color: #23AEFE;
+    width: 40px;
+    height: 30px;
+    text-align: center;
+    padding: 0px;
+    border-radius: 2px;
+    padding-top: 2px;
+    color: #fff;
+    font-weight: 500;
+}
+.ratingsContainer div{
+    padding: 10px 0;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+} 
+.ratingsContainer p{
+    font-weight: 500;
+    height: 30px;
+    width: 100px;
+    padding-top: 2px;
+    text-align: center;
+    background: rgb(133, 255, 214);
+}
