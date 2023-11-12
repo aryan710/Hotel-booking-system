@@ -3,24 +3,94 @@ const authControllers = require("./controllers/authControllers");
 const bookingController = require("./controllers/bookingController");
 const authMiddleware = require("./middleware/auth-middleware");
 const customerMiddleware = require("./middleware/customer-middleware");
-const router = require('express').Router();
+const hotelMiddleware = require("./middleware/hotel-middleware");
+const adminMiddleware = require("./middleware/admin-middleware");
+const adminControllers = require("./controllers/adminControllers");
+const router = require("express").Router();
 
 // hotel routes
-router.get('/api/get-hotels', hotelControllers.getHotels)
-router.get('/api/get-hotel/:id', hotelControllers.getHotel)
-router.post('/api/book-hotel/:id', authMiddleware,bookingController.bookHotel)
-router.post('/api/create-hotel', hotelControllers.createHotel)
+router.get("/api/get-hotels", hotelControllers.getHotels);
+router.get("/api/get-hotel/:id", hotelControllers.getHotel);
+router.post(
+  "/api/book-hotel/:id",
+  authMiddleware,
+  customerMiddleware,
+  bookingController.bookHotel
+);
+router.post(
+  "/api/feedback/:id",
+  authMiddleware,
+  customerMiddleware,
+  hotelControllers.giveFeedback
+);
 
 // user routes
-router.post('/api/user-register', authControllers.register);
-router.post('/api/user-login', authControllers.login);
-router.post('/api/user-logout', authControllers.logout);
+router.post("/api/user-register", authControllers.register);
+router.post("/api/user-login", authControllers.login);
+router.post("/api/user-logout", authControllers.logout);
 
+// hotel
+router.post(
+  "/api/hotel/create-hotel",
+  authMiddleware,
+  hotelMiddleware,
+  hotelControllers.createHotel
+);
+
+
+// admin routets
+router.get(
+  "/api/admin/approved-hotel",
+  authMiddleware,
+  adminMiddleware,
+  adminControllers.getApprovedHotels
+);
+router.get(
+  "/api/admin/unapproved-hotel",
+  authMiddleware,
+  adminMiddleware,
+  adminControllers.getUnapprovedHotels
+);
+router.put(
+  "/api/admin/approve-hotel/:id",
+  authMiddleware,
+  adminMiddleware,
+  adminControllers.approveHotel
+);
+router.put(
+  "/api/admin/unapprove-hotel/:id",
+  authMiddleware,
+  adminMiddleware,
+  adminControllers.unapproveHotel
+);
+router.get(
+  "/api/admin/customers",
+  authMiddleware,
+  adminMiddleware,
+  adminControllers.getAllCustomers
+);
+router.get(
+  "/api/admin/hotel-admins",
+  authMiddleware,
+  adminMiddleware,
+  adminControllers.getAllHotelAdmins
+);
+// router.delete(
+//   "/api/admin/dlt-hotel/:id",
+//   authMiddleware,
+//   adminMiddleware,
+//   hotelControllers.deleteHotel
+// );
+
+// router.delete(
+//   "/api/admin/customer/:id",
+//   authMiddleware,
+//   adminMiddleware,
+//   hotelControllers.deleteCustomer
+// );
 
 // router.get('/api/get-user')
-// router.post('/api/feedback/:hotelId/:roomId')
 // router.post('/api/booking/:hotelId/:roomId')
-
 
 // // hotel routes
 // router.post('/api/register-hotel')
@@ -30,4 +100,4 @@ router.post('/api/user-logout', authControllers.logout);
 // router.put('/api/update-room')
 // router.put('/api/update-room')
 
-module.exports = router
+module.exports = router;

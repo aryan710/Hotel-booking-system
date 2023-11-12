@@ -2,7 +2,7 @@ const tokenService = require("../services/token-service");
 
 async function customerMiddleware(req, res, next) {
   try {
-    if(req.userData.role !== 'customer' || !req.userData){
+    if(req.user.role !== 'customer' || !req.user){
         throw new Error();
     }
     next();

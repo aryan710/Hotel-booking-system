@@ -6,6 +6,7 @@ const hotelSchema = new Schema(
     name: {
       type: String,
       required: true,
+      unique: true,
     },
     approve: {
       type: Boolean,
@@ -15,6 +16,7 @@ const hotelSchema = new Schema(
     email: {
       type: String,
       required: true,
+      unique: true,
     },
     description: {
       type: String,
@@ -40,6 +42,7 @@ const hotelSchema = new Schema(
     contact_number: {
       type: String,
       required: true,
+      unique: true,
     },
     rooms: {
       type: Array,
@@ -64,17 +67,14 @@ const hotelSchema = new Schema(
         type: String,
       },
     },
-    feedbacks: [
-      {
-        userId: {
-          type: Schema.Types.ObjectId,
-          ref: "User",
-        },
-        message: {
-          type: String,
-        },
+    feedbacks: {
+      type: Array,
+      items: {
+        type: Schema.Types.ObjectId,
+        ref: 'Feedback'
       },
-    ],
+    },
+    
   },
   {
     timestamps: true,

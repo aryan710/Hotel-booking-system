@@ -72,6 +72,7 @@ class HotelControllers {
         data: {},
       });
     }
+
     let hotel;
     try {
       hotel = await hotelService.createHotel({
@@ -98,6 +99,50 @@ class HotelControllers {
       message: `your hotel id is ${hotel._id}`,
       success: true,
       data: hotel,
+    });
+  }
+
+  async giveFeedback(req, res) {
+    const { id } = req.params;
+    const { feedback } = req.body;
+    let hotel;
+    try {
+      hotel = await hotelService.getHotel(id);
+      if (!hotel) {
+        return res.status(404).json({
+          error: true,
+          message: "The request is missing a required parameter",
+          success: false,
+          data: {},
+        });
+      }
+    } catch (error) {
+      return res.status(500).json({
+        error: true,
+        message: "Internal server error 1",
+        success: false,
+        data: {},
+      });
+    }
+    let feed;
+    try {
+      feed = await hotelService.createFeedback(req.user._id, id, feedback);
+      hotel.feedbacks.push(feed._id);
+      await hotel.save();
+    } catch (error) {
+      return res.status(500).json({
+        error: true,
+        message: "Internal server error 1",
+        success: false,
+        data: {},
+      });
+    }
+
+    res.status(200).json({
+      error: true,
+      message: "thank you for your feedback!!",
+      success: false,
+      data: feed,
     });
   }
 }

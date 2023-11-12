@@ -1,4 +1,5 @@
 const bookingModel = require("../models/booking-model");
+const feedbackModel = require("../models/feedback-model");
 const hotelModel = require("../models/hotel-model");
 
 class HotelService {
@@ -6,10 +7,20 @@ class HotelService {
     const hotels = hotelModel.find();
     return hotels;
   }
+  
   async getHotel(id) {
     const hotel = hotelModel.findOne({ _id: id });
     return hotel;
   }
+
+  async getApprovedHotels(hotels){
+    return hotels.filter(hotel => hotel.approve);
+  }
+
+  async getUnapprovedHotels(hotels){
+    return hotels.filter(hotel => !hotel.approve);
+  }
+     
   async createHotel(data) {
     const {
       name,
@@ -33,6 +44,7 @@ class HotelService {
       rooms,
     });
   }
+
   async isRoomTypeExist(hotel, roomType) {
     let available = false;
     let roomTypeExist = false;
@@ -72,6 +84,10 @@ class HotelService {
       checkOutDate: checkOut,
       totalPrice: netPrice,
     });
+  }
+
+  async createFeedback(userId, hotelId, feedback){
+    return await feedbackModel.create({userId, hotelId, feedback});
   }
 }
 module.exports = new HotelService();

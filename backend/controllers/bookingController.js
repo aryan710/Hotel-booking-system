@@ -59,7 +59,6 @@ class BookingControllers {
     const differenceInDays = difference / (1000 * 3600 * 24);
     const pricePerday = await hotelService.getPricePerDay(hotel, roomType);
     const netPrice = pricePerday * differenceInDays;
-    console.log(netPrice);
 
     let booking;
     try {
