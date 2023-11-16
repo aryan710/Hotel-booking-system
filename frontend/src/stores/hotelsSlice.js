@@ -1,27 +1,32 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  isSidebarOpen: false,
-  hotels_loading: false,
-  hotels_error: false,
-  hotels: [],
-  single_hotel_loading: false,
-  single_hotel_error: false,
-  single_hotel:{},
+  name:'',
+  email:'',
+  contact_number:'',
+  address:'',
+  pincode:'',
+  state:'',
+  city:'',
 };
 
 export const hotelsSlice = createSlice({
     name: 'hotels',
     initialState,
     reducers:{
-        openSidebar: (state, action)=>{
-            state.isSidebarOpen = true;
+        setContactDetails: (state, action)=>{
+            state.name = action.payload.name;
+            state.email = action.payload.email;
+            state.contact_number = action.payload.contact_number;
         },
-        closeSidebar: (state,action)=>{
-            state.isSidebarOpen = false;
+        setAddressDetails: (state,action)=>{
+            state.address = action.payload.address;
+            state.pincode = action.payload.pincode;
+            state.state = action.payload.state;
+            state.city = action.payload.city;
         }
     }
 })
 
-export const {openSidebar, closeSidebar} = hotelsSlice.actions;
+export const {setContactDetails, setAddressDetails} = hotelsSlice.actions;
 export default hotelsSlice.reducer

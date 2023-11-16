@@ -31,6 +31,15 @@ const userSchema = new Schema(
     profilePicture: {
       type: String,
     },
+    hotelId:{
+      type: Schema.Types.ObjectId,
+      ref: 'Hotel',
+      unique: true,
+    },
+    activated:{
+      type: Boolean,
+      default: false,
+    },
     role: {
       type: String,
       enum: ["customer", "admin", "hotel"], // Define possible roles

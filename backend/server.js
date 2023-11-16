@@ -6,8 +6,15 @@ const database = require("./database");
 const hotelModel = require("./models/hotel-model");
 const router = require('./routes')
 const cookieParser = require('cookie-parser');
+const cors = require('cors')
 database();
 app.use(cookieParser());
+const corsOption = {
+    origin: ['http://localhost:3000'],
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE"],
+}
+app.use(cors(corsOption));
 app.use(express.json());
 app.use(router);
 

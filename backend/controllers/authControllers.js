@@ -1,5 +1,6 @@
 const UserDto = require("../dtos/user-dto");
 const refreshModel = require("../models/refresh-model");
+const userModel = require("../models/user-model");
 const hashService = require("../services/hash-service");
 const tokenService = require("../services/token-service");
 const userService = require("../services/user-service");
@@ -71,7 +72,8 @@ class AuthControlers {
     const { accessToken, refreshToken } = tokenService.createToken({
       _id: user._id,
       role: user.role,
-      username: user.username
+      activeted: user.activated,
+      username: user.username,
     });
 
     try {
@@ -99,7 +101,12 @@ class AuthControlers {
       error: false,
       message: "user registered successfully",
       success: true,
-      data: { user: userDto, auth: true },
+      data: {
+        user: userDto,
+        auth: true,
+        activated: user.activated,
+        role: user.role,
+      },
     });
   }
   async login(req, res) {
@@ -152,7 +159,8 @@ class AuthControlers {
     const { accessToken, refreshToken } = tokenService.createToken({
       _id: user._id,
       role: user.role,
-      username: user.username
+      activated: user.activated,
+      username: user.username,
     });
 
     try {
@@ -180,7 +188,12 @@ class AuthControlers {
       error: false,
       message: `welcome back  ${userDto.username}!!`,
       success: true,
-      data: { user: userDto, auth: true },
+      data: {
+        user: userDto,
+        auth: true,
+        activated: user.activated,
+        role: user.role,
+      },
     });
   }
   async logout(req, res) {
@@ -199,14 +212,75 @@ class AuthControlers {
     res.clearCookie("refreshToken");
     res.clearCookie("accessToken");
 
-    res
-      .status(200)
-      .json({
-        error: false,
-        message: `logged out`,
-        success: true,
-        data: { user: null, auth: false },
-      });
+    res.status(200).json({
+      error: false,
+      message: `logged out`,
+      success: true,
+      data: { user: null, auth: false },
+    });
+  }
+  async refresh(req, res) {
+    const { refreshToken: refreshTokenFromCookie } = req.cookies;
+    let userData;
+    try {
+      userData = await tokenService.verifyRefreshToken(refreshTokenFromCookie);
+    } catch (error) {
+      return res.status(401).json({ message: "invalid token" });
+    }
+    // check if token is in database
+    let token;
+    try {
+      token = await tokenService.findRefreshToken(
+        userData._id,
+        refreshTokenFromCookie
+      );
+      if (!token) {
+        return res.status(401).json({ message: "Invalid token" });
+      }
+    } catch (error) {
+      return res.status(500).json({ message: "Internal Error" });
+    }
+    // check if valid user
+    const user = await userModel.findById(userData._id);
+    if (!user) {
+      return res.status(404).json({ message: "No user" });
+    }
+    // generate new accesstoken and refresh token
+    const { refreshToken, accessToken } = tokenService.createToken({
+      _id: userData._id,
+      role: user.role,
+      activeted: user.activated,
+      username: user.username,
+    });
+
+    // update refresh token
+    try {
+      await tokenService.updateRefreshToken(userData._id, refreshToken);
+    } catch (error) {
+      return res.status(500).json({ message: "Internal Error" });
+    }
+
+    res.cookie("accessToken", accessToken, {
+      maxAge: 1000 * 60 * 60 * 24 * 30, //30 days
+      httpOnly: true,
+    });
+    res.cookie("refreshToken", refreshToken, {
+      maxAge: 1000 * 60 * 60 * 24 * 30, //30 days
+      httpOnly: true,
+    });
+
+    const userDto = new UserDto(user);
+    res.status(200).json({
+      error: false,
+      message: "user registered successfully",
+      success: true,
+      data: {
+        user: userDto,
+        auth: true,
+        activated: user.activated,
+        role: user.role,
+      },
+    });
   }
 }
 module.exports = new AuthControlers();

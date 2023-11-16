@@ -7,41 +7,43 @@ class HotelService {
     const hotels = hotelModel.find();
     return hotels;
   }
-  
+
   async getHotel(id) {
     const hotel = hotelModel.findOne({ _id: id });
     return hotel;
   }
 
-  async getApprovedHotels(hotels){
-    return hotels.filter(hotel => hotel.approve);
+  async getApprovedHotels(hotels) {
+    return hotels.filter((hotel) => hotel.approve);
   }
 
-  async getUnapprovedHotels(hotels){
-    return hotels.filter(hotel => !hotel.approve);
+  async getUnapprovedHotels(hotels) {
+    return hotels.filter((hotel) => !hotel.approve);
   }
-     
+
   async createHotel(data) {
     const {
       name,
       email,
-      description,
       contact_number,
-      images,
-      location,
       address,
-      rooms,
+      userId,
+      city,
+      state,
+      pincode,
     } = data;
-
+    const location = {
+      city,
+      pincode,
+      state,
+    };
     return await hotelModel.create({
       name,
+      user: userId,
       email,
-      description,
       contact_number,
-      images,
       location,
       address,
-      rooms,
     });
   }
 
@@ -83,11 +85,12 @@ class HotelService {
       checkInDate: checkIn,
       checkOutDate: checkOut,
       totalPrice: netPrice,
+      status: "confirmed",
     });
   }
 
-  async createFeedback(userId, hotelId, feedback){
-    return await feedbackModel.create({userId, hotelId, feedback});
+  async createFeedback(userId, hotelId, feedback) {
+    return await feedbackModel.create({ userId, hotelId, feedback });
   }
 }
 module.exports = new HotelService();

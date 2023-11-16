@@ -28,6 +28,7 @@ router.post(
 router.post("/api/user-register", authControllers.register);
 router.post("/api/user-login", authControllers.login);
 router.post("/api/user-logout", authControllers.logout);
+router.get('/api/refresh', authControllers.refresh)
 
 // hotel
 router.post(
@@ -36,7 +37,12 @@ router.post(
   hotelMiddleware,
   hotelControllers.createHotel
 );
-
+router.get(
+  "/api/hotel/get-all-bookings/:id",
+  authMiddleware,
+  hotelMiddleware,
+  bookingController.getAllConfirmedBooking
+);
 
 // admin routets
 router.get(

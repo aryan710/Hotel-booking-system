@@ -11,6 +11,14 @@ class UserService {
   }
   async createUser(user) {
     const { username, email, hashedPassword, role } = user;
+    if(!role){
+      return await userModel.create({
+        username,
+        email,
+        password: hashedPassword,
+        activated: true
+      });
+    }
     return await userModel.create({
       username,
       email,

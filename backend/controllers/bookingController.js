@@ -1,3 +1,4 @@
+const bookingService = require("../services/booking-service");
 const hotelService = require("../services/hotel-service");
 
 class BookingControllers {
@@ -82,8 +83,64 @@ class BookingControllers {
       error: true,
       message: "Pay to confirm your room",
       success: false,
-      data: booking ,
+      data: booking,
     });
+  }
+
+  async getAllConfirmedBooking(req, res) {
+    const id  = req.user._id;
+    if (!id) {
+      return res.status(400).json({
+        error: true,
+        message: "The request is missing a required parameter",
+        success: false,
+        data: {},
+      });
+    }
+    try {
+      const bookings = await bookingService.getAllConfirmedBookings(id);
+      res.status(200).json({
+        error: false,
+        message: "Confirmed bookings: ",
+        success: true,
+        data: bookings
+      });
+    } catch (error) {
+      return res.status(500).json({
+        error: true,
+        message: error.message,
+        success: false,
+        data: {},
+      });
+    }
+  }
+
+  async getAllCanceledBookings(req,res){
+    const { id } = req.params;
+    if (!id) {
+      return res.status(400).json({
+        error: true,
+        message: "The request is missing a required parameter",
+        success: false,
+        data: {},
+      });
+    }
+    try {
+      const bookings = bookingService.getAllCanceledBookings(id);
+      res.status(200).json({
+        error: true,
+        message: "Pay to confirm your room",
+        success: false,
+        data: bookings
+      });
+    } catch (error) {
+      return res.status(500).json({
+        error: true,
+        message: error.message,
+        success: false,
+        data: {},
+      });
+    }
   }
 }
 module.exports = new BookingControllers();

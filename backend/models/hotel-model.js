@@ -5,8 +5,13 @@ const hotelSchema = new Schema(
   {
     name: {
       type: String,
-      required: true,
       unique: true,
+      required: true,
+    },
+    user:{
+      type: Schema.Types.ObjectId,
+      unique: true,
+      ref: 'User'
     },
     approve: {
       type: Boolean,
@@ -26,13 +31,17 @@ const hotelSchema = new Schema(
         type: String,
         required: true,
       },
+      pincode: {
+        type: String,
+        required: true,
+      },
       state: {
         type: String,
         required: true,
       },
       country: {
         type: String,
-        required: true,
+        default: 'India'
       },
     },
     address: {
