@@ -9,6 +9,7 @@ import {
 import { useDispatch } from "react-redux";
 import { openToaster } from "../../../stores/toasterSlice";
 import { loginApi } from "../../../http";
+import { setAuth } from "../../../stores/authSlice";
 const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -54,6 +55,7 @@ const Login = () => {
         );
       }
       setIsSubmiting(false);
+      dispatch(setAuth(data));
       if(data.data.activated === false && data.data.role === 'hotel'){
         navigate('/hotel-details');
       }

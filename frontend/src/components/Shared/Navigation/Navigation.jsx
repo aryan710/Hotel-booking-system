@@ -1,16 +1,64 @@
-import React from "react";
+import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
+import { useNavigate } from "react-router-dom";
 import NavDropdown from "react-bootstrap/NavDropdown";
-
+import { useSelector, useDispatch } from "react-redux";
+import { logoutApi } from "../../../http";
+import { clearAuth, setAuth } from "../../../stores/authSlice";
+import { openToaster } from "../../../stores/toasterSlice";
+import { CircularProgress } from "@mui/material";
 const Navigation = () => {
+  const [isLogingOut, setIsLogingOut] = useState(false);
+  const isAuth = useSelector((state) => state.auth.isAuth);
+  const role = useSelector((state) => state.auth.role);
+  console.log(role);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const handleClick = () => {
+    navigate("/signin");
+  };
+  const styles = {
+    spinner: {
+      width: 20,
+      height: 20,
+      color: "#fff",
+      marginTop: 2,
+    },
+  };
+  const handleLogout = async () => {
+    setIsLogingOut(true);
+    try {
+      await logoutApi();
+      dispatch(clearAuth());
+      setIsLogingOut(false);
+      dispatch(
+        openToaster({
+          message: `logged out`,
+          error: false,
+          success: true,
+        })
+      );
+    } catch (error) {
+      setIsLogingOut(false);
+      dispatch(
+        openToaster({
+          message: error.message,
+          error: true,
+          success: false,
+        })
+      );
+    }
+  };
   return (
-    <Navbar expand="lg" style={{background:"#56B2FF"}}>
-      <Container fluid style={{background:"#56B2FF"}} >
-        <Navbar.Brand href="#">Navbar scroll</Navbar.Brand>
+    <Navbar expand="lg" style={{ background: "#56B2FF" }}>
+      <Container fluid style={{ background: "#56B2FF" }}>
+        <Navbar.Brand href="#" style={{ color: "#fff", fontWeight: "bold" }}>
+          Hotel
+        </Navbar.Brand>
         <Navbar.Toggle aria-controls="navbarScroll" />
         <Navbar.Collapse id="navbarScroll">
           <Nav
@@ -18,7 +66,12 @@ const Navigation = () => {
             style={{ maxHeight: "100px" }}
             navbarScroll
           >
-            <Nav.Link href="/hotels">Hotels</Nav.Link>
+            {role === "hotel" ? (
+              <Nav.Link href="/add-room">Add Room</Nav.Link>
+            ) : (
+              <Nav.Link href="/hotels">Hotels</Nav.Link>
+            )}
+
             <Nav.Link href="#action2">Link</Nav.Link>
             <NavDropdown title="Link" id="navbarScrollingDropdown">
               <NavDropdown.Item href="#action3">Action</NavDropdown.Item>
@@ -30,12 +83,17 @@ const Navigation = () => {
                 Something else here
               </NavDropdown.Item>
             </NavDropdown>
-            <Nav.Link href="#" disabled>
-              Link
-            </Nav.Link>
           </Nav>
           <Form className="d-flex">
-            <Button variant="outline-success">Login</Button>
+            {isLogingOut && isAuth ? (
+              <Button>
+                <CircularProgress color="secondary" style={styles.spinner} />
+              </Button>
+            ) : isAuth && !isLogingOut ? (
+              <Button onClick={handleLogout}>Logout</Button>
+            ) : (
+              <Button onClick={handleClick}>Login</Button>
+            )}
           </Form>
         </Navbar.Collapse>
       </Container>

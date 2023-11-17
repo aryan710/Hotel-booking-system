@@ -11,6 +11,15 @@
 .roomTypeWrapper:hover{
     background-color: #bfd3e2;
 }
+.imgDiv{
+    width: 400px;
+    height: 200px;
+    overflow: hidden;
+}
+.imgDiv img{
+    object-fit: cover;
+    height: 200px;
+}
 .typeName{
     width: 100%;
     display: flex;

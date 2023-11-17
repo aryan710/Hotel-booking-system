@@ -1,25 +1,19 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { setAuth } from "../stores/authSlice";
+import { setSingleHotel } from "../stores/allHotelsSlice";
 
-// data: {
-//     user: userDto,
-//     auth: true,
-//     activated: user.activated,
-//     role: user.role,
-//   },
-export function useLoadingWithRefresh() {
+export function useSingleHotels(id) {
   const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
   useEffect(() => {
     (async () => {
       try {
         const { data } = await axios.get(
-          `${process.env.REACT_APP_API_URL}/api/refresh`,
+          `${process.env.REACT_APP_API_URL}/api/get-hotel/${id}`,
           { withCredentials: true }
         );
-        dispatch(setAuth(data));
+        dispatch(setSingleHotel(data.data));
         setLoading(false);
       } catch (error) {
         console.log(error);
@@ -28,5 +22,5 @@ export function useLoadingWithRefresh() {
     })();
   }, []);
 
-  return {loading};
+  return { loading };
 }

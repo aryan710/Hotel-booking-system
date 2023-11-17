@@ -1,7 +1,9 @@
 import React from "react";
 import styles from "./Hotels.module.css";
 import Card from "../../components/Card/Card";
-import { useNavigate } from "react-router-dom";
+import {useSelector } from "react-redux";
+import { useAllHotels } from "../../hooks/useAllHotels";
+import Loader from "../Loader/Loader";
 const hotelsData = [
   {
     hotelNo: 1,
@@ -118,18 +120,23 @@ const hotelsData = [
 ];
 
 const Hotels = () => {
-  const navigate = useNavigate();
-  const renderHotel = () =>{
-  }
+  const { loading } = useAllHotels();
+  const { hotels } = useSelector((state) => state.allhotels);
   return (
     <div className={styles.hotelsWrapper}>
       <div className={styles.hotelsUpperContainer}>
         <div className={styles.hotelsHeader}></div>
-        <div className={styles.hotelsContainer}>
-          {hotelsData.map((hotel) => {
-            return <Card onClick={()=>renderHotel(hotel)} key={hotel.hotelNo} hotel={hotel} />;
-          })}
-        </div>
+        {loading ? (
+          <>
+            <Loader />
+          </>
+        ) : (
+          <div className={styles.hotelsContainer}>
+            {hotels.map((hotel, index) => {
+              return <Card key={index} hotel={hotel}/>;
+            })}
+          </div>
+        )}
       </div>
     </div>
   );

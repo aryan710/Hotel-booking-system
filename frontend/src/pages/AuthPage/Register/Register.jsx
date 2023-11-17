@@ -63,7 +63,12 @@ const Register = () => {
         );
       }
       setIsSubmiting(false);
-      navigate('/hotel-details');
+      if(data.data.role === 'hotel'){
+        navigate('/hotel-details');
+      }
+      if(data.data.role === 'customer'){
+        navigate('/hotels');
+      }
     } catch (error) {
       setIsSubmiting(false);
       dispatch(

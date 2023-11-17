@@ -1,0 +1,33 @@
+.bookingForm {
+  background-color: #fff;
+  padding: 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  max-width: 400px;
+  margin: 0 auto;
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
+.bookingForm h2 {
+  margin-bottom: 15px;
+}
+
+.bookingForm label {
+  display: block;
+  margin-bottom: 5px;
+}
+.bookingForm select,
+.bookingForm input[type="date"],
+.bookingForm input[type="number"],
+.bookingForm input[type="submit"] {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+}
+
+.bookingForm input[type="submit"] {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}

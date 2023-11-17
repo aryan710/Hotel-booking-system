@@ -12,6 +12,8 @@ import ReactToaster from "./components/ReactToaster/ReactToaster";
 import { useEffect } from "react";
 import { useLoadingWithRefresh } from "./hooks/useLoadingWithRefresh";
 import Loader from "./pages/Loader/Loader";
+import BookNow from "./pages/BookNow/BookNow";
+import AddRoom from "./pages/AddRoom/AddRoom";
 function App() {
   const {loading} = useLoadingWithRefresh();
   return (
@@ -28,7 +30,9 @@ function App() {
             <Route path="/signup" element={<Register />} />
             <Route path="/signin" element={<Login />} />
             <Route path="/hotel-details" element={<HotelForm />} />
-            <Route path="/singlehotel" element={<SingleHotel />} />
+            <Route path="/singlehotel/:id" element={<SingleHotel />} />
+            <Route path="/booking/:id" element={<BookNow />} />
+            <Route path="/add-room" element={<AddRoom />} />
           </Routes>
           <Footer />
         </BrowserRouter>

@@ -37,6 +37,12 @@ router.post(
   hotelMiddleware,
   hotelControllers.createHotel
 );
+router.post(
+  "/api/hotel/add-room/:id",
+  authMiddleware,
+  hotelMiddleware,
+  hotelControllers.addRoomType
+);
 router.get(
   "/api/hotel/get-all-bookings/:id",
   authMiddleware,
