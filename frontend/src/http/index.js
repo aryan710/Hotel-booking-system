@@ -12,7 +12,11 @@ const api = axios.create({
 export const registerApi = (data) => api.post("/api/user-register", data);
 export const loginApi = (data) => api.post("/api/user-login", data);
 export const logoutApi = (data) => api.post("/api/user-logout", data);
-export const addRoomApi = (data,id) => api.post(`/api/hotel/add-room/${id}`, data);
+export const addRoomApi = (data, id) =>
+  api.post(`/api/hotel/add-room/${id}`, data);
+export const getKeyApi = () => api.get(`/api/get-key`);
+export const createOrderApi = (data, id) =>
+  api.post(`/api/checkout/${id}`, data);
 
 // Interceptors
 api.interceptors.response.use(
@@ -28,12 +32,9 @@ api.interceptors.response.use(
     ) {
       originalRequest._isRetry = true;
       try {
-        await axios.get(
-          `${process.env.REACT_APP_API_URL}/api/refresh`,
-          {
-            withCredentials: true,
-          }
-        );
+        await axios.get(`${process.env.REACT_APP_API_URL}/api/refresh`, {
+          withCredentials: true,
+        });
         return api.request(originalRequest);
       } catch (error) {
         console.log(error.message);

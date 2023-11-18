@@ -20,7 +20,7 @@ const SingleHotel = () => {
   const { isAuth } = useSelector((state) => state.auth);
   const hotel = useSelector((state) => state.allhotels.singleHotel);
   if (Object.keys(hotel).length === 0) {
-    navigate("/hotels");
+    navigate(`/singlehotel/${id}`);
   }
   const handleBooking = () => {
     navigate(`/booking/${hotel._id}`);

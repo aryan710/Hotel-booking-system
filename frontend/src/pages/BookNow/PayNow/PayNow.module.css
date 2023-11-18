@@ -1,0 +1,24 @@
+.bookingForm {
+    background-color: #fff;
+    height: 65vh;
+    padding: 40px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    max-width: 500px;
+    width: 500px;
+    margin: 0 auto;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    display: flex;
+    flex-direction: column;
+    /* align-items: center; */
+    justify-content: space-around;    
+  }
+  
+  .bookingForm .heading {
+    border-bottom: 5px solid rgb(0, 89, 255);
+    width: 40%;
+  }
+  .bookingForm h2 {
+    margin-bottom: 15px;
+    color: rgb(0, 89, 255);
+  }

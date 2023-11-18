@@ -223,9 +223,9 @@ class AuthControlers {
     const { refreshToken: refreshTokenFromCookie } = req.cookies;
     let userData;
     try {
-      userData = await tokenService.verifyRefreshToken(refreshTokenFromCookie);
+      userData = tokenService.verifyRefreshToken(refreshTokenFromCookie);
     } catch (error) {
-      return res.status(401).json({ message: "invalid token" });
+      return res.status(401).json({ message: "invalid token1" });
     }
     // check if token is in database
     let token;

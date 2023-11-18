@@ -4,8 +4,8 @@ const hotelService = require("../services/hotel-service");
 class BookingControllers {
   async bookHotel(req, res) {
     const hotelId = req.params.id;
-    const { roomType, checkIn, checkOut } = req.body;
-    if (!hotelId || !checkIn || !checkOut || !roomType) {
+    const { roomType, checkIn, checkOut, amount ,paymentId} = req.body;
+    if (!hotelId || !checkIn || !checkOut || !roomType || !amount) {
       return res.status(400).json({
         error: true,
         message: "The request is missing a required parameter",
@@ -61,6 +61,40 @@ class BookingControllers {
     const pricePerday = await hotelService.getPricePerDay(hotel, roomType);
     const netPrice = pricePerday * differenceInDays;
 
+    if (Number(amount) !== netPrice) {
+      return res.status(400).json({
+        error: true,
+        message:
+          "The provided amount does not match the expected amount for this transaction.",
+        success: false,
+        data: {},
+      });
+    }
+
+    try {
+      const { rooms } = hotel;
+      const data = {};
+      const newRooms = rooms.filter((room) => room.room_type !== roomType);
+      for (const room of rooms) {
+        if (room.room_type === roomType) {
+          data.room_type = room.room_type;
+          data.price_per_nigh = room.price_per_nigh;
+          data.total_room_available = room.total_room_available - 1;
+          data.room_image = room.room_image;
+        }
+      }
+      newRooms.push(data);
+      hotel.rooms = [...newRooms];
+      await hotel.save();
+    } catch (error) {
+      return res.status(500).json({
+        error: true,
+        message: "Internal server error 1",
+        success: false,
+        data: {},
+      });
+    }
+
     let booking;
     try {
       booking = await hotelService.bookHotel(
@@ -69,7 +103,8 @@ class BookingControllers {
         roomType,
         checkIn,
         checkOut,
-        netPrice
+        netPrice,
+        paymentId
       );
     } catch (error) {
       return res.status(500).json({
@@ -88,7 +123,7 @@ class BookingControllers {
   }
 
   async getAllConfirmedBooking(req, res) {
-    const id  = req.user._id;
+    const id = req.user._id;
     if (!id) {
       return res.status(400).json({
         error: true,
@@ -103,7 +138,7 @@ class BookingControllers {
         error: false,
         message: "Confirmed bookings: ",
         success: true,
-        data: bookings
+        data: bookings,
       });
     } catch (error) {
       return res.status(500).json({
@@ -115,7 +150,7 @@ class BookingControllers {
     }
   }
 
-  async getAllCanceledBookings(req,res){
+  async getAllCanceledBookings(req, res) {
     const { id } = req.params;
     if (!id) {
       return res.status(400).json({
@@ -131,7 +166,7 @@ class BookingControllers {
         error: true,
         message: "Pay to confirm your room",
         success: false,
-        data: bookings
+        data: bookings,
       });
     } catch (error) {
       return res.status(500).json({

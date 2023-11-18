@@ -69,14 +69,14 @@ class HotelService {
     let price;
     for (const room of rooms) {
       if (room.room_type === roomType) {
-        price = room.price_per_night;
+        price = room.price_per_nigh;
       }
     }
     // console.log(setroom);
-    return price;
+    return Number(price);
   }
 
-  async bookHotel(user, hotelId, roomType, checkIn, checkOut, netPrice) {
+  async bookHotel(user, hotelId, roomType, checkIn, checkOut, netPrice, paymentId) {
     // console.log(netPrice);
     return await bookingModel.create({
       user: user._id,
@@ -86,6 +86,7 @@ class HotelService {
       checkOutDate: checkOut,
       totalPrice: netPrice,
       status: "confirmed",
+      payment_id: paymentId
     });
   }
 

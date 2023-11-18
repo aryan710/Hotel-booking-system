@@ -6,6 +6,8 @@ const customerMiddleware = require("./middleware/customer-middleware");
 const hotelMiddleware = require("./middleware/hotel-middleware");
 const adminMiddleware = require("./middleware/admin-middleware");
 const adminControllers = require("./controllers/adminControllers");
+const { paymentVerification } = require("./controllers/paymentControllers");
+const paymentControllers = require("./controllers/paymentControllers");
 const router = require("express").Router();
 
 // hotel routes
@@ -28,7 +30,7 @@ router.post(
 router.post("/api/user-register", authControllers.register);
 router.post("/api/user-login", authControllers.login);
 router.post("/api/user-logout", authControllers.logout);
-router.get('/api/refresh', authControllers.refresh)
+router.get("/api/refresh", authControllers.refresh);
 
 // hotel
 router.post(
@@ -87,6 +89,12 @@ router.get(
   adminMiddleware,
   adminControllers.getAllHotelAdmins
 );
+
+// Rajorpay routes
+router.post("/api/checkout/:id", paymentControllers.checkout);
+router.get("/api/get-key", paymentControllers.getKey);
+router.post("/api/paymentverification", paymentControllers.paymentVerification);
+
 // router.delete(
 //   "/api/admin/dlt-hotel/:id",
 //   authMiddleware,
