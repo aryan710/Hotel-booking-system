@@ -14,6 +14,8 @@ import { useLoadingWithRefresh } from "./hooks/useLoadingWithRefresh";
 import Loader from "./pages/Loader/Loader";
 import BookNow from "./pages/BookNow/BookNow";
 import AddRoom from "./pages/AddRoom/AddRoom";
+import PaymentSuccess from "./pages/PaymentSuccess/PaymentSuccess";
+import MyBooking from "./pages/MyBookings/MyBooking";
 function App() {
   const {loading} = useLoadingWithRefresh();
   return (
@@ -33,6 +35,8 @@ function App() {
             <Route path="/singlehotel/:id" element={<SingleHotel />} />
             <Route path="/booking/:id" element={<BookNow />} />
             <Route path="/add-room" element={<AddRoom />} />
+            <Route path="/paymentsuccess" element={<PaymentSuccess />} />
+            <Route path="/my-bookings" element={<MyBooking />} />
           </Routes>
           <Footer />
         </BrowserRouter>

@@ -91,7 +91,7 @@ router.get(
 );
 
 // Rajorpay routes
-router.post("/api/checkout/:id", paymentControllers.checkout);
+router.post("/api/checkout/:id",authMiddleware, paymentControllers.checkout);
 router.get("/api/get-key", paymentControllers.getKey);
 router.post("/api/paymentverification", paymentControllers.paymentVerification);
 

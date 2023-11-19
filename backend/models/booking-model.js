@@ -36,7 +36,6 @@ const bookingSchema = new Schema(
     },
     payment_id: {
       type: String,
-      required: true
     }
   },
   {

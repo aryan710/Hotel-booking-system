@@ -17,6 +17,8 @@ export const addRoomApi = (data, id) =>
 export const getKeyApi = () => api.get(`/api/get-key`);
 export const createOrderApi = (data, id) =>
   api.post(`/api/checkout/${id}`, data);
+export const paymentVerificationApi = (data) =>
+  api.post(`/api/paymentverification`, data);
 
 // Interceptors
 api.interceptors.response.use(

@@ -1,3 +1,4 @@
+const bookingModel = require("../models/booking-model");
 const hotelService = require("../services/hotel-service");
 const paymentService = require("../services/paymentService");
 const instance = require("../services/razorpay-service");
@@ -81,6 +82,28 @@ class PaymentControllers {
       currency: "INR",
     };
     const order = await instance.orders.create(options);
+
+    try {
+      let booking = await bookingModel.create({
+        user: req.user._id,
+        hotel: id,
+        room_type: roomType,
+        checkInDate: checkIn,
+        checkOutDate: checkOut,
+        totalPrice: netPrice,
+      });
+      res.cookie("bookingId", booking._id, {
+        maxAge: 1000 * 60 * 10, //30 days
+        httpOnly: true,
+      });
+    } catch (error) {
+      return res.status(500).json({
+        error: true,
+        message: error.message,
+        success: false,
+        data: {},
+      });
+    }
     res.status(200).json({
       success: true,
       order,
@@ -90,27 +113,77 @@ class PaymentControllers {
   async paymentVerification(req, res) {
     const { razorpay_order_id, razorpay_payment_id, razorpay_signature } =
       req.body;
+
     const body = razorpay_order_id + "|" + razorpay_payment_id;
     const expectedSignature = crypto
       .createHmac("sha256", process.env.RAZORPAY_APT_SECRET)
       .update(body.toString())
       .digest("hex");
     const isAuthentic = expectedSignature === razorpay_signature;
-    if (isAuthentic) {
-      // Database comes here
-      await Payment.create({
-        razorpay_order_id,
-        razorpay_payment_id,
-        razorpay_signature,
-      });
-    } else {
+    if (!isAuthentic) {
       return res.status(400).json({
         success: false,
       });
     }
 
+    const { bookingId } = req.cookies;
+    let booking;
+    let roomType;
+    try {
+      booking = await bookingModel.findById(bookingId);
+      if(!booking){
+        throw new Error();
+      }
+      roomType = booking.room_type;
+      const user = booking.user;
+      const hotel = booking.hotel;
+      await paymentService.createPayment({
+        user,
+        hotel,
+        razorpay_order_id,
+        razorpay_payment_id,
+        razorpay_signature,
+      });
+      booking.status = "confirmed";
+      await booking.save();
+    } catch (error) {
+      return res.status(500).json({
+        error: true,
+        message: "Internal Error",
+        success: false,
+        data: {},
+      });
+    }
+
+    // decrease hotel rooms;
+    try {
+      let hotel = await hotelService.getHotel(booking.hotel.toString());
+      const { rooms } = hotel;
+      const data = {};
+      const newRooms = rooms.filter((room) => room.room_type !== roomType);
+      for (const room of rooms) {
+        if (room.room_type === roomType) {
+          data.room_type = room.room_type;
+          data.price_per_nigh = room.price_per_nigh;
+          data.total_room_available = room.total_room_available - 1;
+          data.room_image = room.room_image;
+        }
+      }
+      newRooms.push(data);
+      hotel.rooms = [...newRooms];
+      await hotel.save();
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json({
+        error: true,
+        message: "Internal Error",
+        success: false,
+        data: {},
+      });
+    }
     res.status(200).json({
       success: true,
+      razorpay_payment_id,
     });
   }
 }
