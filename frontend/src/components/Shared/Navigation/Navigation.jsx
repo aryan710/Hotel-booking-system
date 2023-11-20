@@ -56,8 +56,8 @@ const Navigation = () => {
   return (
     <Navbar expand="lg" style={{ background: "#56B2FF" }}>
       <Container fluid style={{ background: "#56B2FF" }}>
-        <Navbar.Brand href="#" style={{ color: "#fff", fontWeight: "bold" }}>
-          Hotel
+        <Navbar.Brand href="/" style={{ color: "#fff", fontWeight: "bold" }}>
+          Hotelin.com
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="navbarScroll" />
         <Navbar.Collapse id="navbarScroll">
@@ -67,22 +67,11 @@ const Navigation = () => {
             navbarScroll
           >
             {role === "hotel" ? (
-              <Nav.Link href="/add-room">Add Room</Nav.Link>
+              <Nav.Link href="/add-room" style={{ color: "#fff" }}>Add Room</Nav.Link>
             ) : (
-              <Nav.Link href="/hotels">Hotels</Nav.Link>
+              <Nav.Link href="/hotels" style={{ color: "#fff" }}>Hotels</Nav.Link>
             )}
-
-            <Nav.Link href="#action2">Link</Nav.Link>
-            <NavDropdown title="Link" id="navbarScrollingDropdown">
-              <NavDropdown.Item href="#action3">Action</NavDropdown.Item>
-              <NavDropdown.Item href="#action4">
-                Another action
-              </NavDropdown.Item>
-              <NavDropdown.Divider />
-              <NavDropdown.Item href="#action5">
-                Something else here
-              </NavDropdown.Item>
-            </NavDropdown>
+            {role === 'customer' && <Nav.Link href="/my-bookings" style={{ color: "#fff" }}>Bookings</Nav.Link>}  
           </Nav>
           <Form className="d-flex">
             {isLogingOut && isAuth ? (

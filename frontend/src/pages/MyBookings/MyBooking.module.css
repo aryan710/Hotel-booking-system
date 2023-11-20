@@ -1,0 +1,19 @@
+.wrapper{
+    min-height: 100vh;
+    height : 100%;
+    width: 80%;
+    padding: 20px;
+    margin: 20px auto;
+    display: flex;
+    align-items: start;
+    /* overflow: hidden; */
+}
+
+.innerWrapper{
+    width: 90%;
+    margin: 0 auto;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}

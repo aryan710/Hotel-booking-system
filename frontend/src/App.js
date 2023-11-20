@@ -16,10 +16,11 @@ import BookNow from "./pages/BookNow/BookNow";
 import AddRoom from "./pages/AddRoom/AddRoom";
 import PaymentSuccess from "./pages/PaymentSuccess/PaymentSuccess";
 import MyBooking from "./pages/MyBookings/MyBooking";
+import SingleBooking from "./pages/SingleBooking/SingleBooking";
 function App() {
   const {loading} = useLoadingWithRefresh();
   return (
-    <div className="App">
+    <div className="App" style={{"min-height": "100vh"}}>
       {loading ? (
         <Loader/>
       ) : (
@@ -34,6 +35,7 @@ function App() {
             <Route path="/hotel-details" element={<HotelForm />} />
             <Route path="/singlehotel/:id" element={<SingleHotel />} />
             <Route path="/booking/:id" element={<BookNow />} />
+            <Route path="/my-booking/:id" element={<SingleBooking />} />
             <Route path="/add-room" element={<AddRoom />} />
             <Route path="/paymentsuccess" element={<PaymentSuccess />} />
             <Route path="/my-bookings" element={<MyBooking />} />

@@ -76,12 +76,21 @@ class PaymentControllers {
         data: {},
       });
     }
-
-    const options = {
-      amount: Number(amount * 100),
-      currency: "INR",
-    };
-    const order = await instance.orders.create(options);
+    let order;
+    try {
+      const options = {
+        amount: Number(amount * 100),
+        currency: "INR",
+      };
+      order = await instance.orders.create(options);
+    } catch (error) {
+      return res.status(500).json({
+        error: true,
+        message: error.message,
+        success: false,
+        data: {},
+      });
+    }
 
     try {
       let booking = await bookingModel.create({
@@ -131,7 +140,7 @@ class PaymentControllers {
     let roomType;
     try {
       booking = await bookingModel.findById(bookingId);
-      if(!booking){
+      if (!booking) {
         throw new Error();
       }
       roomType = booking.room_type;

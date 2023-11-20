@@ -94,7 +94,9 @@ router.get(
 router.post("/api/checkout/:id",authMiddleware, paymentControllers.checkout);
 router.get("/api/get-key", paymentControllers.getKey);
 router.post("/api/paymentverification", paymentControllers.paymentVerification);
-
+router.get('/api/user/my-bookings', authMiddleware, customerMiddleware, bookingController.userBookings)
+router.get('/api/user/my-booking/:id', authMiddleware, customerMiddleware, bookingController.getBooking)
+router.get('/api/user/cancel-booking/:id', authMiddleware, customerMiddleware, bookingController.cancelBooking)
 // router.delete(
 //   "/api/admin/dlt-hotel/:id",
 //   authMiddleware,

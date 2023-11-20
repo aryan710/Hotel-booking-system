@@ -6,6 +6,12 @@ class BookingService {
   async getAllConfirmedBookings(hotelId){
     return bookingModel.find({hotel: hotelId, status:"confirmed"});
   }
+  async getAllBookings(id){
+    return bookingModel.find({user: id}).populate('hotel');
+  }
+  async getBookingById(id){
+    return bookingModel.findById(id).populate('hotel');
+  }
   async getAllCanceledBookings(hotelId){
     return bookingModel.find({hotel: hotelId, status:"canceled"});
   }

@@ -4,7 +4,7 @@ const hotelService = require("../services/hotel-service");
 class BookingControllers {
   async bookHotel(req, res) {
     const hotelId = req.params.id;
-    const { roomType, checkIn, checkOut, amount ,paymentId} = req.body;
+    const { roomType, checkIn, checkOut, amount, paymentId } = req.body;
     if (!hotelId || !checkIn || !checkOut || !roomType || !amount) {
       return res.status(400).json({
         error: true,
@@ -139,6 +139,158 @@ class BookingControllers {
         message: "Confirmed bookings: ",
         success: true,
         data: bookings,
+      });
+    } catch (error) {
+      return res.status(500).json({
+        error: true,
+        message: error.message,
+        success: false,
+        data: {},
+      });
+    }
+  }
+
+  async cancelBooking(req, res) {
+    const { id } = req.params;
+    if (!id) {
+      return res.status(400).json({
+        error: true,
+        message: "The request is missing a required parameter",
+        success: false,
+        data: {},
+      });
+    }
+
+    try {
+      const booking = await bookingService.getBookingById(id);
+      if (booking.user.toString() !== req.user._id.toString()) {
+        return res.status(401).json({
+          error: true,
+          message: "Unauthorized user",
+          success: false,
+          data: {},
+        });
+      }
+      booking.status = "canceled";
+      await booking.save();
+      res.status(200).json({
+        error: false,
+        message: "Confirmed bookings: ",
+        success: true,
+      });
+    } catch (error) {
+      return res.status(500).json({
+        error: true,
+        message: error.message,
+        success: false,
+        data: {},
+      });
+    }
+  }
+
+  async getBooking(req, res) {
+    const { id } = req.params;
+    if (!id) {
+      return res.status(400).json({
+        error: true,
+        message: "The request is missing a required parameter",
+        success: false,
+        data: {},
+      });
+    }
+
+    try {
+      const booking = await bookingService.getBookingById(id);
+
+      if (booking.user.toString() !== req.user._id.toString()) {
+        return res.status(401).json({
+          error: true,
+          message: "Unauthorized user",
+          success: false,
+          data: {},
+        });
+      }
+
+      const {
+        _id,
+        hotel,
+        room_type,
+        checkInDate,
+        checkOutDate,
+        totalPrice,
+        status,
+      } = booking;
+
+      const data = {
+        _id,
+        room_type,
+        checkInDate,
+        checkOutDate,
+        totalPrice,
+        status,
+      };
+
+      let roomUrl;
+      const { rooms } = hotel;
+      for (let room of rooms) {
+        if (room.room_type === room_type) {
+          roomUrl = room.room_image;
+        }
+      }
+      data.roomUrl = roomUrl;
+      data.hotelName = hotel.name;
+      data.hotelAddress = hotel.address;
+      data.hotelEmail = hotel.email;
+      data.hotelContactNumber = hotel.contact_number;
+
+      res.status(200).json({
+        error: false,
+        message: "Confirmed bookings: ",
+        success: true,
+        data,
+      });
+    } catch (error) {
+      return res.status(500).json({
+        error: true,
+        message: error.message,
+        success: false,
+        data: {},
+      });
+    }
+  }
+
+  async userBookings(req, res) {
+    const id = req.user._id;
+    if (!id) {
+      return res.status(400).json({
+        error: true,
+        message: "The request is missing a required parameter",
+        success: false,
+        data: {},
+      });
+    }
+    try {
+      const bookings = await bookingService.getAllBookings(id);
+
+      const sendData = [];
+      for (let booking of bookings) {
+        const { _id, hotel, status, checkInDate, checkOutDate } = booking;
+        const data = {
+          _id,
+          hotelID: hotel._id,
+          hotelName: hotel.name,
+          status,
+          checkInDate,
+          checkOutDate,
+        };
+        sendData.push(data);
+      }
+
+      res.status(200).json({
+        error: false,
+        message: "bookings: ",
+        success: true,
+        data: sendData,
       });
     } catch (error) {
       return res.status(500).json({
