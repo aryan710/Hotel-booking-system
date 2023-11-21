@@ -60,9 +60,10 @@ class AuthControlers {
         role,
       });
     } catch (error) {
+      console.log(error.message);
       return res.status(500).json({
         error: true,
-        message: "Db error 2",
+        message: error,
         success: false,
         data: {},
       });
@@ -219,6 +220,7 @@ class AuthControlers {
       data: { user: null, auth: false },
     });
   }
+
   async refresh(req, res) {
     const { refreshToken: refreshTokenFromCookie } = req.cookies;
     let userData;

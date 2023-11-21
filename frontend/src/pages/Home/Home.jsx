@@ -20,7 +20,7 @@ const Home = () => {
           {isAuth && role === "hotel" && (
             <div className={styles.hotel}>
               <Link
-                to={"/hotel/add-room"}
+                to={"/add-room"}
                 style={{ textDecoration: "none", color: "#fff" }}
               >
                 <div>

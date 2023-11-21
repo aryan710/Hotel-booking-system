@@ -70,7 +70,7 @@ function App() {
               }
             />
             <Route
-              path="/hotel/add-room"
+              path="/add-room"
               element={
                 isAuth && activated && role === "hotel" ? <AddRoom /> : <Home />
               }

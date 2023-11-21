@@ -34,7 +34,6 @@ const userSchema = new Schema(
     hotelId:{
       type: Schema.Types.ObjectId,
       ref: 'Hotel',
-      unique: true,
     },
     activated:{
       type: Boolean,
