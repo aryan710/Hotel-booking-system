@@ -9,7 +9,7 @@ const cors = require('cors')
 database();
 app.use(cookieParser());
 const corsOption = {
-    origin: ['http://localhost:3000'],
+    origin: [process.env.CLIENT_PORT],
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE"],
 }
