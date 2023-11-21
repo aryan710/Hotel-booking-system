@@ -13,6 +13,7 @@ import {
 import { useDispatch } from "react-redux";
 import { openToaster } from "../../../stores/toasterSlice";
 import { registerApi } from "../../../http";
+import { setAuth } from "../../../stores/authSlice";
 const Register = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -63,6 +64,7 @@ const Register = () => {
         );
       }
       setIsSubmiting(false);
+      dispatch(setAuth(data));
       if(data.data.role === 'hotel'){
         navigate('/hotel-details');
       }
@@ -132,7 +134,6 @@ const Register = () => {
             </MenuItem>
             <MenuItem value={"customer"}>Customer</MenuItem>
             <MenuItem value={"hotel"}>Hotel</MenuItem>
-            <MenuItem value={"admin"}>Admin</MenuItem>
           </Select>
         </FormControl>
         {!isSubmiting ? (

@@ -1,16 +1,52 @@
 import React from "react";
 import styles from "./Home.module.css";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 const Home = () => {
+  const { isAuth, role } = useSelector((state) => state.auth);
   return (
     <>
       <div className={styles.header}>
         <div className={styles.hero}>
           <h2>Welcome to Hotelin.com</h2>
           <p>Book your luxurious stay now!</p>
-          <Link to={"/hotels"} className={styles.btn}>
-            Book Now
-          </Link>
+          {isAuth && role === "hotel" ? (
+            <></>
+          ) : (
+            <Link to={"/hotels"} className={styles.btn}>
+              Book Now
+            </Link>
+          )}
+          {isAuth && role === "hotel" && (
+            <div className={styles.hotel}>
+              <Link
+                to={"/hotel/add-room"}
+                style={{ textDecoration: "none", color: "#fff" }}
+              >
+                <div>
+                  <h4>Add Room</h4>
+                </div>
+              </Link>
+
+              <Link
+                to={"/hotel/edit-room"}
+                style={{ textDecoration: "none", color: "#fff" }}
+              >
+                <div>
+                  <h4>Edit Room</h4>
+                </div>
+              </Link>
+
+              <Link
+                to={"/hotel/all-bookings"}
+                style={{ textDecoration: "none", color: "#fff" }}
+              >
+                <div>
+                  <h4>All Bookings</h4>
+                </div>
+              </Link>
+            </div>
+          )}
         </div>
       </div>
       <section id="gallery" className={styles.section}>

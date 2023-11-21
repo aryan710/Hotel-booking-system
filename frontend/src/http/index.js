@@ -19,6 +19,8 @@ export const createOrderApi = (data, id) =>
   api.post(`/api/checkout/${id}`, data);
 export const paymentVerificationApi = (data) =>
   api.post(`/api/paymentverification`, data);
+export const createHotelApi = (data) =>
+  api.post(`/api/hotel/create-hotel`, data);
 
 // Interceptors
 api.interceptors.response.use(

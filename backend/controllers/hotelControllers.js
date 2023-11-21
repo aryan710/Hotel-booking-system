@@ -53,7 +53,7 @@ class HotelControllers {
     }
     const { name, contact_number, email, address, pincode, state, city } =
       req.body;
-
+    console.log(req.body);
     const userId = req.user._id;
 
     if (
@@ -103,6 +103,7 @@ class HotelControllers {
       userById.activated = true;
       await userById.save();
     } catch (error) {
+      console.log(error);
       return res.status(500).json({
         error: true,
         message: error.message,

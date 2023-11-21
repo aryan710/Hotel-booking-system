@@ -5,12 +5,10 @@ const hotelSchema = new Schema(
   {
     name: {
       type: String,
-      unique: true,
       required: true,
     },
     user:{
       type: Schema.Types.ObjectId,
-      unique: true,
       ref: 'User'
     },
     approve: {

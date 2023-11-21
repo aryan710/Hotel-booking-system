@@ -1,15 +1,15 @@
 import React, { useState } from "react";
 import styles from "./ContactDetails.module.css";
 import { Button, TextField } from "@mui/material";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { openToaster } from "../../../stores/toasterSlice";
 import { setContactDetails } from "../../../stores/hotelsSlice";
 const ContactDetails = ({ nextStep }) => {
   const dispatch = useDispatch();
-
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [contactNumber, setContactNumber] = useState("");
+  const hotels = useSelector((state) => state.hotels);
+  const [name, setName] = useState(hotels.name);
+  const [email, setEmail] = useState(hotels.email);
+  const [contactNumber, setContactNumber] = useState(hotels.contact_number);
   const handleNext = () => {
     if (!name || !email || !contactNumber) {
       return dispatch(
@@ -23,9 +23,9 @@ const ContactDetails = ({ nextStep }) => {
     const data = {
       name,
       email,
-      contact_number: contactNumber
-    }
-    dispatch(setContactDetails(data))
+      contact_number: contactNumber,
+    };
+    dispatch(setContactDetails(data));
     nextStep();
   };
   return (

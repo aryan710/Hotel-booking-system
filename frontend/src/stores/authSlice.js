@@ -30,10 +30,13 @@ export const authSlice = createSlice({
       state.activated = false;
       state.role = "";
     },
+    setActivate(state, action){
+      state.activated = true;
+    }
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { setAuth , clearAuth} = authSlice.actions;
+export const { setAuth , clearAuth,setActivate} = authSlice.actions;
 
 export default authSlice.reducer;
