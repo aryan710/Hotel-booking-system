@@ -1,0 +1,73 @@
+.image {
+  height: 150px;
+  width: 150px;
+}
+.image img {
+  object-fit: cover;
+}
+.bookingCardContainer {
+  padding: 20px;
+  background-color: #e2effa;
+  border-radius: 10px;
+  box-shadow: 0px 0px 5px 1px rgb(192, 192, 192);
+  transition: all.3s ease-in-out;
+}
+
+.bookingCardInnerContainer {
+  display: flex;
+  align-items: center;
+  position: relative;
+  gap: 20px;
+}
+.details {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.btns {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.edit {
+  background: rgb(0, 194, 10);
+  transition: all.3s ease-in-out;
+  color: #fff;
+}
+.edit:hover{
+    background: rgb(0, 175, 102);
+}
+.delete {
+  background: rgb(255, 72, 72);
+  color: #fff;
+  transition: all.3s ease-in-out;
+}
+.delete:hover {
+  background: rgb(216, 70, 70);
+}
+
+.btn {
+  border: none;
+  outline: none;
+  padding: 5px 10px;
+  text-align: center;
+  transition: all.3s ease-in-out;
+  border-radius: 5px;
+  cursor: default;
+  font-weight: 500;
+}
+.confirmed {
+  background: #21e335;
+}
+.pending {
+  background: #ffc700;
+}
+.canceled {
+  background: #ff8946;
+}

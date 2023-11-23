@@ -67,11 +67,24 @@ const Navigation = () => {
             navbarScroll
           >
             {role === "hotel" ? (
-              <Nav.Link href="/add-room" style={{ color: "#fff" }}>Add Room</Nav.Link>
+              <>
+                <Nav.Link href="/add-room" style={{ color: "#fff" }}>
+                  Add Room
+                </Nav.Link>
+                <Nav.Link href="/hotel/edit-room" style={{ color: "#fff" }}>
+                  Edit Room
+                </Nav.Link>
+              </>
             ) : (
-              <Nav.Link href="/hotels" style={{ color: "#fff" }}>Hotels</Nav.Link>
+              <Nav.Link href="/hotels" style={{ color: "#fff" }}>
+                Hotels
+              </Nav.Link>
             )}
-            {role === 'customer' && <Nav.Link href="/my-bookings" style={{ color: "#fff" }}>Bookings</Nav.Link>}  
+            {role === "customer" && (
+              <Nav.Link href="/my-bookings" style={{ color: "#fff" }}>
+                Bookings
+              </Nav.Link>
+            )}
           </Nav>
           <Form className="d-flex">
             {isLogingOut && isAuth ? (
