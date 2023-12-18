@@ -1,3 +1,4 @@
+const hotelModel = require("../models/hotel-model");
 const userModel = require("../models/user-model");
 const hotelService = require("../services/hotel-service");
 
@@ -77,7 +78,7 @@ class HotelControllers {
     let userById;
     try {
       userById = await userModel.findById(userId);
-      if(!userById) throw new Error();
+      if (!userById) throw new Error();
     } catch (error) {
       res.status(401).json({
         error: true,
@@ -111,7 +112,6 @@ class HotelControllers {
         data: {},
       });
     }
-
 
     res.status(200).json({
       error: false,
@@ -187,8 +187,8 @@ class HotelControllers {
           data: {},
         });
       }
-      
-      if((hotel.user).toString() !== (req.user._id).toString()){
+
+      if (hotel.user.toString() !== req.user._id.toString()) {
         return res.status(401).json({
           error: true,
           message: "Unauthorized user",
@@ -200,8 +200,8 @@ class HotelControllers {
       // console.log(hotel);
       const data = {
         room_type: roomTypeName,
-        price_per_nigh: price,
-        total_room_available: roomAvailable,
+        price_per_nigh: Number(price),
+        total_room_available: Number(roomAvailable),
         room_image: url,
       };
 
@@ -222,10 +222,11 @@ class HotelControllers {
     }
   }
 
-  async modifyRoomType(req, res) {
+  async editRoom(req, res) {
     const { id } = req.params;
-    const { roomTypeName, price, url, roomAvailable } = req.body;
-    if (!id && !roomTypeName && !price && !roomAvailable && !url) {
+    // console.log(req.body);
+    const { roomTypeName, price, roomAvailable } = req.body;
+    if (!id && !roomTypeName && !price && !roomAvailable) {
       return res.status(400).json({
         error: true,
         message: "The request is missing a required parameter",
@@ -235,7 +236,7 @@ class HotelControllers {
     }
 
     try {
-      const hotel = hotelService.getHotel(id);
+      const hotel = await hotelModel.findById(id);
       if (!hotel) {
         return res.status(404).json({
           error: true,
@@ -244,6 +245,7 @@ class HotelControllers {
           data: {},
         });
       }
+
       const { roomTypeExist } = await hotelService.isRoomTypeExist(
         hotel,
         roomTypeName
@@ -257,25 +259,30 @@ class HotelControllers {
         });
       }
 
-      const { rooms } = hotel;
+      const rooms = hotel.rooms;
+      let roomToUpdate;
+      let remainingRooms;
+      if (rooms[0].room_type === roomTypeName) {
+        roomToUpdate = rooms[0];
+        roomToUpdate.price_per_nigh = Number(price);
+        roomToUpdate.total_room_available = Number(roomAvailable);
+        rooms[0] = roomToUpdate;
+        remainingRooms = rooms;
+      } else {
+        roomToUpdate = rooms.find((room) => room.room_type === roomTypeName);
+        roomToUpdate.price_per_nigh = Number(price);
+        roomToUpdate.total_room_available = Number(roomAvailable);
+        remainingRooms = rooms.filter(
+          (room) => room.room_type !== roomTypeName
+        );
+        remainingRooms.unshift(roomToUpdate);
+      }
 
-      const newRooms = rooms.filter((room) => room.room_type !== roomTypeName);
-      const data = {
-        room_type: roomTypeName,
-        price_per_nigh: price,
-        total_room_available: roomAvailable,
-        room_image: url,
-      };
-      newRooms.push(data);
-
-      hotel.rooms = [...newRooms];
+      hotel.rooms = [...remainingRooms];
       await hotel.save();
 
       res.status(200).json({
-        error: false,
-        message: `room added successfully`,
-        success: true,
-        data: hotel,
+        message: `room updated successfully`,
       });
     } catch (error) {
       return res.status(500).json({
@@ -285,10 +292,11 @@ class HotelControllers {
     }
   }
 
-  async modifyRoomAvailability(req, res) {
+  async deleteRoom(req, res) {
     const { id } = req.params;
-    const { roomTypeName, roomAvailable } = req.body;
-    if (!id || !roomAvailable) {
+    // console.log(req.body);
+    const { roomTypeName } = req.body;
+    if (!roomTypeName) {
       return res.status(400).json({
         error: true,
         message: "The request is missing a required parameter",
@@ -298,7 +306,7 @@ class HotelControllers {
     }
 
     try {
-      const hotel = hotelService.getHotel(id);
+      const hotel = await hotelModel.findById(id);
       if (!hotel) {
         return res.status(404).json({
           error: true,
@@ -307,6 +315,7 @@ class HotelControllers {
           data: {},
         });
       }
+
       const { roomTypeExist } = await hotelService.isRoomTypeExist(
         hotel,
         roomTypeName
@@ -320,32 +329,31 @@ class HotelControllers {
         });
       }
 
-      const { rooms } = hotel;
+      const rooms = hotel.rooms;
+      let remainingRooms = rooms.filter(
+        (room) => room.room_type !== roomTypeName
+      );
+      // if (rooms[0].room_type === roomTypeName) {
+      //   roomToUpdate = rooms[0];
+      //   roomToUpdate.price_per_nigh = Number(price);
+      //   roomToUpdate.total_room_available = Number(roomAvailable);
+      //   rooms[0] = roomToUpdate;
+      //   remainingRooms = rooms;
+      // } else {
+      //   roomToUpdate = rooms.find((room) => room.room_type === roomTypeName);
+      //   roomToUpdate.price_per_nigh = Number(price);
+      //   roomToUpdate.total_room_available = Number(roomAvailable);
+      //   remainingRooms = rooms.filter(
+      //     (room) => room.room_type !== roomTypeName
+      //   );
+      //   remainingRooms.unshift(roomToUpdate);
+      // }
 
-      const newRooms = rooms.filter((room) => room.room_type !== roomTypeName);
-
-      const data = {
-        room_type: roomTypeName,
-        total_room_available: roomAvailable,
-      };
-
-      for (const room of rooms) {
-        if (room.room_type === roomType) {
-          data.price_per_nigh = room.price_per_nigh;
-          data.room_image = room.room_image;
-        }
-      }
-
-      newRooms.push(data);
-
-      hotel.rooms = [...newRooms];
+      hotel.rooms = [...remainingRooms];
       await hotel.save();
 
       res.status(200).json({
-        error: false,
-        message: `room added successfully`,
-        success: true,
-        data: hotel,
+        message: `room deleted successfully`,
       });
     } catch (error) {
       return res.status(500).json({

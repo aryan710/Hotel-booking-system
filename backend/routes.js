@@ -8,6 +8,8 @@ const adminMiddleware = require("./middleware/admin-middleware");
 const adminControllers = require("./controllers/adminControllers");
 const { paymentVerification } = require("./controllers/paymentControllers");
 const paymentControllers = require("./controllers/paymentControllers");
+const roomsControllers = require("./controllers/roomsControllers");
+const hotelAccessMiddleware = require("./middleware/hotel-access-middleware");
 const router = require("express").Router();
 
 // hotel routes
@@ -45,11 +47,35 @@ router.post(
   hotelMiddleware,
   hotelControllers.addRoomType
 );
+router.put(
+  "/api/hotel/edit-room/:id",
+  authMiddleware,
+  hotelMiddleware,
+  hotelControllers.editRoom
+);
+router.post(
+  "/api/hotel/delete-room/:id",
+  authMiddleware,
+  hotelMiddleware,
+  hotelControllers.deleteRoom
+);
 router.get(
   "/api/hotel/get-all-bookings/:id",
   authMiddleware,
   hotelMiddleware,
   bookingController.getAllConfirmedBooking
+);
+router.get(
+  "/api/hotel/get-all-rooms/:id",
+  authMiddleware,
+  hotelAccessMiddleware,
+  roomsControllers.getAllRooms
+);
+router.put(
+  "/api/hotel/:id/delete-room",
+  authMiddleware,
+  hotelAccessMiddleware,
+  roomsControllers.getAllRooms
 );
 
 // admin routets

@@ -21,6 +21,10 @@ export const paymentVerificationApi = (data) =>
   api.post(`/api/paymentverification`, data);
 export const createHotelApi = (data) =>
   api.post(`/api/hotel/create-hotel`, data);
+export const editHotelRoomApi = (id, data) =>
+  api.put(`/api/hotel/edit-room/${id}`, data);
+export const deleteHotelRoomApi = (id, data) =>
+  api.post(`/api/hotel/delete-room/${id}`, data);
 
 // Interceptors
 api.interceptors.response.use(

@@ -14,9 +14,11 @@ const AddRoom = () => {
   const [price, setPrice] = useState(1000);
   const [available, setAvailable] = useState(10);
   const [isSubmiting, setIsSubmiting] = useState(false);
+
   const hotelId = useSelector((state) => {
     if (state.auth.user) return state.auth.user.hotelID;
   });
+  
   useEffect(() => {
     if (!hotelId) navigate("/");
   },[]);

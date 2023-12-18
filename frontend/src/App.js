@@ -19,6 +19,7 @@ import MyBooking from "./pages/MyBookings/MyBooking";
 import SingleBooking from "./pages/SingleBooking/SingleBooking";
 import { useSelector } from "react-redux";
 import EditRoom from "./pages/EditRoom/EditRoom";
+import HotelAllBookings from "./pages/HotelAllBooking/HotelAllBookings";
 function App() {
   const { loading } = useLoadingWithRefresh();
   const { isAuth, role, activated } = useSelector((state) => state.auth);
@@ -71,7 +72,7 @@ function App() {
               }
             />
             <Route
-              path="/add-room"
+              path="/hotel/add-room"
               element={
                 isAuth && activated && role === "hotel" ? <AddRoom /> : <Home />
               }
@@ -79,7 +80,7 @@ function App() {
             <Route
               path="/hotel/all-bookings"
               element={
-                isAuth && activated && role === "hotel" ? <AddRoom /> : <Home />
+                isAuth && activated && role === "hotel" ? <HotelAllBookings /> : <Home />
               }
             />
             <Route path="/paymentsuccess" element={<PaymentSuccess />} />

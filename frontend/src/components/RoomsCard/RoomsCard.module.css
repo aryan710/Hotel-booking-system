@@ -1,8 +1,10 @@
-.image {
+.bookingCardInnerContainer .image {
   height: 150px;
   width: 150px;
 }
-.image img {
+.bookingCardInnerContainer .image img {
+  height: 150px;
+  width: 150px;
   object-fit: cover;
 }
 .bookingCardContainer {

@@ -4,7 +4,7 @@ import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import { useSelector, useDispatch } from "react-redux";
 import { logoutApi } from "../../../http";
@@ -27,6 +27,10 @@ const Navigation = () => {
       height: 20,
       color: "#fff",
       marginTop: 2,
+    },
+    link: {
+      color: "#fff",
+      textDecoration: "none",
     },
   };
   const handleLogout = async () => {
@@ -56,8 +60,17 @@ const Navigation = () => {
   return (
     <Navbar expand="lg" style={{ background: "#56B2FF" }}>
       <Container fluid style={{ background: "#56B2FF" }}>
-        <Navbar.Brand href="/" style={{ color: "#fff", fontWeight: "bold" }}>
-          Hotelin.com
+        <Navbar.Brand style={{ color: "#fff", fontWeight: "bold" }}>
+          <Link
+            to={"/"}
+            style={{
+              color: "#fff",
+              fontWeight: "bold",
+              textDecoration: "none",
+            }}
+          >
+            Hotelin.com
+          </Link>
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="navbarScroll" />
         <Navbar.Collapse id="navbarScroll">
@@ -68,11 +81,11 @@ const Navigation = () => {
           >
             {role === "hotel" ? (
               <>
-                <Nav.Link href="/add-room" style={{ color: "#fff" }}>
-                  Add Room
+                <Nav.Link>
+                  <Link to={"hotel/add-room"} style={styles.link}>Add Room</Link>
                 </Nav.Link>
-                <Nav.Link href="/hotel/edit-room" style={{ color: "#fff" }}>
-                  Edit Room
+                <Nav.Link>
+                  <Link to={"/hotel/edit-room"} style={styles.link}>Edit Room</Link>
                 </Nav.Link>
               </>
             ) : (
